@@ -6,7 +6,7 @@
 } 
 
 *, .Modal * {
-  font-family: "Verdana", sans-serif;
+  font-family: "Aller", "Verdana", sans-serif;
   color: aliceblue;
 }
 
@@ -48,7 +48,11 @@ footer {
 }
 
 button, textarea, #modal-panel {
-    background-color: #2f3a42;
+  background-color: #080c0f;
+  color: #fff;
+  border-color: #0093ff;
+  border-width: 4px;
+  border-style: ridge;
 }
 
 #modal-overlay {
@@ -61,6 +65,12 @@ button, textarea, #modal-panel {
   width: 150px;
   height: 40px;
   text-align: center;
+  background-color: #f4f4f4;
+  outline-style: outset;
+  color: #202020;
+  outline-color: #ff8400;
+  font-weight: bold;
+  border-style: none;
 }
 
 .Modal {
