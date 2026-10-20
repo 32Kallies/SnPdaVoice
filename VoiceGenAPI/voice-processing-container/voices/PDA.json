@@ -1,10 +1,14 @@
 {
   "voice_id": "pda",
   "voice_name": "IVONA 2 Amy OEM",
-  "volume":70,
+  "volume":100,
   "rate": 0,
   "filter_settings": {
+    "fl_studio_path": "",
+    "fl_project_containing_folder": "",
+    "fl_project_name_without_extension": "",
     "pitch_shift": -0.23,
+    "padding": 0.2,
     "filters": [
       {
         "type": "time_padding",
