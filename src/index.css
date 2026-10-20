@@ -1,5 +1,5 @@
  body {
-  background-color: #0e1116;
+  background-color: #0a0c0f;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -26,7 +26,7 @@ hr {
 }
 
 .topnav {
-    background-color:#499fc9;
+    background-color:#108ee9;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -36,7 +36,7 @@ hr {
 }
 
 footer {
-    background-color:#2d3b44;
+    background-color:#111418;
     margin-top: auto;
     padding-left: 1%;
 }
