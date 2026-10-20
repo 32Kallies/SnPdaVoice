@@ -54,9 +54,7 @@ function SiteBio() {
         <p>I first started figuring out the PDA voice for <a href="https://www.nexusmods.com/subnautica/mods/1820">The Red Plague</a>,
         which made establishing new, natural-feeling content so much easier.
         </p>
-        <p>Getting the filters right has been difficult, taking me over 800 attempts, and unfortunately it still isn't perfect.
-          We don't know the original settings used, so an approximation is needed, and it can still be improved
-          over time (it's open source!).
+        <p>As of October 2026, I feel safe to say that I have nearly perfected the filters!
         </p>
       </section>
     </div>
