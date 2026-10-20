@@ -4,10 +4,14 @@ namespace VoiceProcessor;
 
 public class PronunciationHelper
 {
+    // these are so stupid honestly
     private static readonly Dictionary<string, string> SpecialPronunciations = new(StringComparer.OrdinalIgnoreCase)
     {
         { "pda", "peedee A" },
-        { "subnautica", "sub not ic uh" }
+        { "subnautica", "sub not ic uh" },
+        { "seamoth", "sea moth" },
+        { "lifepod", "life pod" },
+        { "alterra", "all terra" }
     };
     
     public string Pronounce(string message)
