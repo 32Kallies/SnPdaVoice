@@ -115,7 +115,8 @@ public static class ServerProgram
 
     public static void QueueRequest(VoiceLineRequest request)
     {
-        GetBestQueueForInput(request).EnqueueVoiceLineRequest(request);
+        Queues[0].EnqueueVoiceLineRequest(request);
+        // GetBestQueueForInput(request).EnqueueVoiceLineRequest(request);
         Telemetry.LogReceivedRequest(request);
     }
 
