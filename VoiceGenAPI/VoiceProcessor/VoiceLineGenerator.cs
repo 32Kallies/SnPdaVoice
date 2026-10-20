@@ -13,6 +13,8 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
 {
     private static GenerationResult GetErrorResult(string id) =>
         new("http://invalid.invalid/", id, false);
+
+    private readonly TextPreprocessor _preprocessor = new();
     
     private SpeechSynthesizer? GetSynthesizer()
     {
@@ -73,7 +75,9 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
         var path = Path.Combine(WorkingFolderUtils.GetTempFolder(), "raw-generation.wav");
         synthesizer.SetOutputToWaveFile(path);
 
-        var prompt = new Prompt(input.UseSsml ? FixSsml(input.Message) : input.Message,
+        string processedMessage = _preprocessor.PreprocessText(input.Message);
+        
+        var prompt = new Prompt(input.UseSsml ? FixSsml(processedMessage) : processedMessage,
             input.UseSsml ? SynthesisTextFormat.Ssml : SynthesisTextFormat.Text);
         bool success = await SpeakAsyncWithCompletion(synthesizer, prompt);
 
