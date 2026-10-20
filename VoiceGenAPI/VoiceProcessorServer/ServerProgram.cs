@@ -15,8 +15,8 @@ public static class ServerProgram
 
     public const int Port = 8765;
 
-    private const int NormalQueueCount = 8;
-    private const int LongVoiceLineQueueCount = 4;
+    private const int NormalQueueCount = 1;
+    private const int LongVoiceLineQueueCount = 0;
     private const int LongVoiceLineMinCharacterCutOff = 400;
 
     private static TcpListener? _listener;
@@ -115,8 +115,7 @@ public static class ServerProgram
 
     public static void QueueRequest(VoiceLineRequest request)
     {
-        Queues[0].EnqueueVoiceLineRequest(request);
-        // GetBestQueueForInput(request).EnqueueVoiceLineRequest(request);
+        GetBestQueueForInput(request).EnqueueVoiceLineRequest(request);
         Telemetry.LogReceivedRequest(request);
     }
 
@@ -131,6 +130,11 @@ public static class ServerProgram
 
     private static VoiceLineQueue GetBestQueueForInput(VoiceLineRequest request)
     {
+        if (NormalQueueCount == 1 && LongVoiceLineQueueCount == 0)
+        {
+            return Queues[0];
+        }
+        
         var list = GetQueueListForInput(request);
 
         var bestQueue = list[0];
@@ -154,6 +158,8 @@ public static class ServerProgram
 
     private static List<VoiceLineQueue> GetQueueListForInput(VoiceLineRequest request)
     {
+        if (LongVoiceLineQueueCount == 0) return Queues;
+        
         if (!string.IsNullOrEmpty(request.Input.Message) &&
             request.Input.Message.Length > LongVoiceLineMinCharacterCutOff)
         {

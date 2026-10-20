@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using VoiceProcessor.Data.FilterSettings;
 
 namespace VoiceProcessor.Data;
 
@@ -15,6 +14,4 @@ public class VoiceFilterSettings
     public string FlProjectContainingFolder { get; set; }
     [JsonPropertyName("padding")]
     public double Padding { get; set; }
-    [JsonPropertyName("filters")]
-    public FilterSettingsBase[] Filters { get; set; }
 }

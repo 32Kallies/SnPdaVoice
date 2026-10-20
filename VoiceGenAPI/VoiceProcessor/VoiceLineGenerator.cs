@@ -4,7 +4,6 @@ using System.Speech.Synthesis;
 using CSCore;
 using CSCore.Codecs.WAV;
 using VoiceProcessor.Data;
-using VoiceProcessor.Filters;
 using VoiceProcessor.Utilities;
 
 namespace VoiceProcessor;
@@ -14,9 +13,7 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
 {
     private static GenerationResult GetErrorResult(string id) =>
         new("http://invalid.invalid/", id, false);
-
-    private const int ExportSampleRate = 22000;
-
+    
     private SpeechSynthesizer? GetSynthesizer()
     {
         try
@@ -55,8 +52,7 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
 
             var outputPath = Path.Combine(WorkingFolderUtils.GetTempFolder(), GetUniqueFileName(id, "wav"));
 
-            await Task.Run(() =>
-                AddFiltersAndGenerateNewFile(rawSpeech.Path, outputPath, generatorSettings.FilterSettings));
+            await Task.Run(() => AddFiltersAndGenerateNewFile(outputPath, generatorSettings.FilterSettings));
 
             File.Delete(rawSpeech.Path);
 
@@ -93,44 +89,15 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
         return new RawSpeechGeneration(path, true);
     }
 
-    private async Task AddFiltersAndGenerateNewFile(string inputFilePath,
-        string outputFilePath, VoiceFilterSettings filterSettings)
+    private async Task AddFiltersAndGenerateNewFile(string outputFilePath, VoiceFilterSettings filterSettings)
     {
         if (!string.IsNullOrEmpty(filterSettings.FlStudioPath) && !string.IsNullOrEmpty(filterSettings.FlProjectContainingFolder))
         {
             await AddFiltersWithFlStudioAndGenerate(WorkingFolderUtils.GetTempFolder(), filterSettings, outputFilePath);
             return;
         }
-        
-        using var reader = new WaveFileReader(inputFilePath);
-        var source = reader.ToSampleSource().ToStereo();
 
-        // Change sample rate
-        if (source.WaveFormat.SampleRate != ExportSampleRate)
-        {
-            source = source.ChangeSampleRate(ExportSampleRate);
-        }
-
-        if (Math.Abs(filterSettings.PitchShift) > 0.001f)
-        {
-            source = PitchShift(source, filterSettings.PitchShift);
-        }
-
-        foreach (var filter in filterSettings.Filters)
-        {
-            source = filter.Apply(source);
-        }
-
-        using var final = source.ToWaveSource(16);
-
-        using var writer = new WaveWriter(outputFilePath, final.WaveFormat);
-        byte[] buffer = new byte[final.WaveFormat.BytesPerSecond];
-        int read;
-
-        while ((read = final.Read(buffer, 0, buffer.Length)) > 0)
-        {
-            writer.Write(buffer, 0, read);
-        }
+        throw new Exception("FL Studio is not setup! Make sure you fill out the settings in the 'voice-processing-container/voices/PDA.json' file.");
     }
     
     private async Task AddFiltersWithFlStudioAndGenerate(string outputFolder, VoiceFilterSettings filterSettings, string outputFilePath)
@@ -142,19 +109,6 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
         await RunProcessAsync(flPath, args);
         string outputFilterPath = Path.Combine(outputFolder, filterSettings.FlProjectNameWithoutExtension + ".wav");
         TrimWav(outputFilterPath, outputFilePath, filterSettings.Padding);
-    }
-
-    private ISampleSource PitchShift(ISampleSource source, float semitones)
-    {
-        int sampleCount = (int)source.Length;
-        float[] buffer = new float[sampleCount];
-        int read = 0, totalRead = 0;
-        while ((read = source.Read(buffer, totalRead, sampleCount - totalRead)) > 0)
-        {
-            totalRead += read;
-        }
-
-        return new PitchShiftSource(buffer, source.WaveFormat, semitones);
     }
 
     private async Task<bool> SpeakAsyncWithCompletion(SpeechSynthesizer synthesizer, Prompt prompt,
@@ -181,11 +135,6 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
             synthesizer.SpeakCompleted -= Handler;
             tcs.TrySetResult(true);
         }
-    }
-
-    private static string GetUniqueString()
-    {
-        return Guid.NewGuid().ToString();
     }
     
     private static string GetUniqueFileName(string jobId, string extension)
