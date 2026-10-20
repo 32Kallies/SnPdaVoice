@@ -35,7 +35,7 @@ function TopBar() {
           style={{ border: '0' }}
         />
       </a>
-    <a href="https://github.com/LeeTwentyThree/SnPdaVoice">Source code</a>
+    <a href="https://github.com/32Kallies/SnPdaVoice">Source code</a>
     </div>
   </div>
   );
@@ -45,7 +45,7 @@ function SiteBio() {
   return (
     <div className="container">
       <section className="bio">
-        <p>As someone who has been modding Subnautica for 6+ years, I have always wanted a free, accessible and quick way to
+        <p>As someone who has been modding Subnautica for 7+ years, I have always wanted a free, accessible and quick way to
           generate the Subnautica PDA voice. AI-generated options generally do not sound accurate for replicating the filters. So, I created
           this page to allow anyone to create their own custom PDA lines.
         </p>
@@ -166,7 +166,7 @@ function GenerateMainSection() {
 
   return (
     <section>
-      <h3>⚠️ Voice filters are still under construction and may be improved over time</h3>
+      <h3>The voice filter has been reworked recently to sound more accurate! However, files now take longer to generate.</h3>
       <p>Insert text for voice line generation:</p>
       <textarea
         value={textInput}
@@ -234,7 +234,7 @@ function SiteFooter() {
   return (
     <footer>
       <p>This site is not officially affiliated with Krafton or Unknown Worlds.</p>
-      <p>Uploaded text and generated files are stored temporarily. Generated files are deleted within seven days. The tool does not use artificial intelligence to generate output files.</p>
+      <p>Uploaded text and generated files are stored temporarily. Generated files are deleted within seven days. The tool does NOT use artificial intelligence to generate output files.</p>
     </footer>
   )
 }
