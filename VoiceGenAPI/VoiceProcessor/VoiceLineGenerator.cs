@@ -158,7 +158,7 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
     }
 
     private async Task<bool> SpeakAsyncWithCompletion(SpeechSynthesizer synthesizer, Prompt prompt,
-        int timeoutMs = 15000)
+        int timeoutMs = 5000)
     {
         var tcs = new TaskCompletionSource<bool>();
 
