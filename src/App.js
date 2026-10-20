@@ -166,7 +166,7 @@ function GenerateMainSection() {
 
   return (
     <section>
-      <h3>The voice filter has been reworked recently to sound more accurate! However, files now take longer to generate.</h3>
+      <h3>The voice filter has been reworked recently to sound more accurate! As a result, files now take longer to generate.</h3>
       <p>Insert text for voice line generation:</p>
       <textarea
         value={textInput}
