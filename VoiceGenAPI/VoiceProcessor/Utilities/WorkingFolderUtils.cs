@@ -8,6 +8,7 @@ public static class WorkingFolderUtils
 
     private const string RootFolderName = "voice-processing-container";
     private const string TempFolderName = "temp";
+    private const string FilterFolderName = "filter";
     private const string VoicesFolder = "voices";
     private const string TelemetryFileName = "telemetry.db";
 
@@ -38,6 +39,17 @@ public static class WorkingFolderUtils
     internal static string GetTempFolder()
     {
         var path = Path.Combine(GetWorkingFolderRoot(), TempFolderName);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        return path;
+    }
+    
+    internal static string GetFilterFolder()
+    {
+        var path = Path.Combine(GetWorkingFolderRoot(), FilterFolderName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);

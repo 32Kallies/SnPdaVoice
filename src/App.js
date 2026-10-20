@@ -25,7 +25,7 @@ function App() {
 function TopBar() {
   return (
   <div className="topnav">
-    <h2 className="top-header">Subnautica PDA Voice Generator by Kallie23</h2>
+    <h2 className="top-header">Subnautica PDA Voice Generator 2.0 - by Kallie23</h2>
     <div className="nav-links">
       <a href="https://ko-fi.com/lee23" target="_blank" rel="noopener noreferrer">
         <img
@@ -35,7 +35,8 @@ function TopBar() {
           style={{ border: '0' }}
         />
       </a>
-    <a href="https://github.com/LeeTwentyThree/SnPdaVoice">Source code</a>
+    <a href="https://github.com/32Kallies/SnPdaVoice">Source code</a>
+    <a href="https://www.nexusmods.com/profile/Kallie23/mods?gameId=1155">My Subnautica mods</a>
     </div>
   </div>
   );
@@ -45,17 +46,15 @@ function SiteBio() {
   return (
     <div className="container">
       <section className="bio">
-        <p>As someone who has been modding Subnautica for 6+ years, I have always wanted a free, accessible and quick way to
+        <h2>Why I made this site</h2>
+        <p>As someone who has been modding Subnautica for 7+ years, I have always wanted a free, accessible and quick way to
           generate the Subnautica PDA voice. AI-generated options generally do not sound accurate for replicating the filters. So, I created
           this page to allow anyone to create their own custom PDA lines.
         </p>
         <p>I first started figuring out the PDA voice for <a href="https://www.nexusmods.com/subnautica/mods/1820">The Red Plague</a>,
-        which made establishing new, natural-feeling content so much easier. The technology I use for the Red Plague PDA might be slightly
-        more accurate, but I tend to use this site now because it's much faster.
+        which made establishing new, natural-feeling content so much easier.
         </p>
-        <p>Getting the filters right has been difficult, taking me over 800 attempts, and unfortunately it still isn't perfect.
-          We don't know the original settings used, so an approximation is needed, and it can still be improved
-          over time (it's open source!).
+        <p>As of October 2026, I feel safe to say that I have nearly perfected the filters!
         </p>
       </section>
     </div>
@@ -166,7 +165,7 @@ function GenerateMainSection() {
 
   return (
     <section>
-      <h3>⚠️ Voice filters are still under construction and may be improved over time</h3>
+      <h3>The voice filter has been reworked recently to sound more accurate! As a result, files now take longer to generate.</h3>
       <p>Insert text for voice line generation:</p>
       <textarea
         value={textInput}
@@ -234,7 +233,7 @@ function SiteFooter() {
   return (
     <footer>
       <p>This site is not officially affiliated with Krafton or Unknown Worlds.</p>
-      <p>Uploaded text and generated files are stored temporarily. Generated files are deleted within seven days. The tool does not use artificial intelligence to generate output files.</p>
+      <p>Uploaded text and generated files are stored temporarily. Generated files are deleted within seven days. The tool does NOT use artificial intelligence to generate output files.</p>
     </footer>
   )
 }

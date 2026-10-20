@@ -1,5 +1,5 @@
  body {
-  background-color: #1b242a;
+  background-color: #0e1116;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -30,7 +30,8 @@ hr {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px;
+    padding: 0px;
+    padding-left: 16px;
     color: rgb(0, 0, 0);
 }
 
