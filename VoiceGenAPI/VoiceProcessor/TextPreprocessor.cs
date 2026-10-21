@@ -1,4 +1,5 @@
-﻿using VoiceProcessor.Utilities;
+﻿using System.Text.RegularExpressions;
+using VoiceProcessor.Utilities;
 
 namespace VoiceProcessor;
 
@@ -14,10 +15,16 @@ public class TextPreprocessor
         _pronunciation = new PronunciationHelper();
     }
 
-    public string PreprocessText(string text, bool applyFilter = true, bool fixPronunciation = true)
+    public string PreprocessText(string text, bool applyFilter = true, bool fixPronunciation = true, bool unescape = true, bool removeNewlines = false)
     {
         string result = text;
+
+        if (unescape)
+            result = Regex.Unescape(result);
         
+        if (removeNewlines)
+            result = result.Replace("\n", " ");
+
         if (applyFilter)
             result = _filter.RemoveBlacklistedWords(result);
         
