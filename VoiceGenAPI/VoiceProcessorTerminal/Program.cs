@@ -33,6 +33,30 @@ public static class Program
         
         Console.WriteLine();
         
+        var spanishLogs = @"C:\Program Files (x86)\Steam\steamapps\common\Subnautica\Spanish-logs.json";
+        var spanishJsonText = File.ReadAllText(spanishLogs);
+        var spanishData = JsonSerializer.Deserialize<Dictionary<string, LocalizedEntry>>(spanishJsonText);
+        foreach (var line in spanishData)
+        {
+            Console.WriteLine(line.Value.Item2);
+            Console.WriteLine(line.Key);
+            var input = new GenerationInput
+            {
+                VoiceId = "pda",
+                Message = line.Value.Item2,
+                UseSsml = false
+            };
+
+            var id = line.Key;
+
+            var request = new VoiceLineRequest(input, id);
+
+            await writer.WriteLineAsync(JsonSerializer.Serialize(request));
+            var response = await reader.ReadLineAsync();
+            Console.WriteLine("Response: " + response);
+        }
+        Console.WriteLine("DONE TRANSLATING!");
+        
         while (true)
         {
             Console.WriteLine("Enter your message to speak. Leave an empty input to stop the program.");
@@ -83,4 +107,6 @@ public static class Program
 
         thread.Start();
     }
+    
+    private record LocalizedEntry(string Item1, string Item2);
 }
