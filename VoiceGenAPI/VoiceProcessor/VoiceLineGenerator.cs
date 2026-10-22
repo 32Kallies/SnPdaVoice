@@ -87,9 +87,15 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
             return new RawSpeechGeneration("ERROR", false);
         }
 
+        if (!File.Exists(path))
+        {
+            Console.WriteLine("UNKNOWN ERROR: Outputted raw voice generation was marked as completed but was not found");
+            return new RawSpeechGeneration("ERROR", false);
+        }
+
         synthesizer.SetOutputToNull();
 
-        Console.WriteLine("Saving raw voice line to file at path: " + path);
+        Console.WriteLine("Saved raw voice line to file at path: " + path);
         return new RawSpeechGeneration(path, true);
     }
 
