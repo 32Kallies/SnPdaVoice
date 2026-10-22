@@ -1,0 +1,13 @@
+{
+  "voice_id": "pda_spanish_la",
+  "voice_name": "Vocalizer Expressive Angelica Harpo 22kHz",
+  "volume":80,
+  "rate": 3,
+  "filter_settings": {
+    "fl_studio_path": "C:\\Program Files\\Image-Line\\FL Studio 20\\FL.exe",
+    "fl_project_containing_folder": "C:\\Users\\Kallie\\Documents\\Audio Editing\\TRP\\SPANISH",
+    "fl_project_name_without_extension": "PDA espanol",
+    "pitch_shift": 0.0,
+    "padding": 0.2
+  }
+}
