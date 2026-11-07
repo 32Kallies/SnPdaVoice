@@ -14,7 +14,7 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
     private static GenerationResult GetErrorResult(string id) =>
         new("http://invalid.invalid/", id, false);
     
-    private const float FlStudioTimeOutDurationSeconds = 60;
+    private const float FlStudioTimeOutDurationSeconds = 30;
 
     private readonly TextPreprocessor _preprocessor = new();
     
