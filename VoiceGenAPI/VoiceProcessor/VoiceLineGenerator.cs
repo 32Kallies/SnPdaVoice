@@ -13,6 +13,8 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
 {
     private static GenerationResult GetErrorResult(string id) =>
         new("http://invalid.invalid/", id, false);
+    
+    private const float FlStudioTimeOutDurationSeconds = 60;
 
     private readonly TextPreprocessor _preprocessor = new();
     
@@ -54,7 +56,13 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
 
             var outputPath = Path.Combine(WorkingFolderUtils.GetTempFolder(), GetUniqueFileName(id, "wav"));
 
-            await Task.Run(() => AddFiltersAndGenerateNewFile(outputPath, generatorSettings.FilterSettings));
+            FlStudioResult editResult = new FlStudioResult();
+            await Task.Run(() => AddFiltersAndGenerateNewFile(outputPath, generatorSettings.FilterSettings, editResult));
+            
+            if (editResult.Success == false)
+            {
+                throw new TimeoutException($"FL Studio timed out after {FlStudioTimeOutDurationSeconds} seconds");
+            }
 
             File.Delete(rawSpeech.Path);
 
@@ -99,26 +107,29 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
         return new RawSpeechGeneration(path, true);
     }
 
-    private async Task AddFiltersAndGenerateNewFile(string outputFilePath, VoiceFilterSettings filterSettings)
+    private async Task AddFiltersAndGenerateNewFile(string outputFilePath, VoiceFilterSettings filterSettings, FlStudioResult result)
     {
         if (!string.IsNullOrEmpty(filterSettings.FlStudioPath) && !string.IsNullOrEmpty(filterSettings.FlProjectContainingFolder))
         {
-            await AddFiltersWithFlStudioAndGenerate(WorkingFolderUtils.GetTempFolder(), filterSettings, outputFilePath);
+            await AddFiltersWithFlStudioAndGenerate(WorkingFolderUtils.GetTempFolder(), filterSettings, outputFilePath, result);
             return;
         }
 
         throw new Exception("FL Studio is not setup! Make sure you fill out the settings in the 'voice-processing-container/voices/PDA.json' file.");
     }
     
-    private async Task AddFiltersWithFlStudioAndGenerate(string outputFolder, VoiceFilterSettings filterSettings, string outputFilePath)
+    private async Task AddFiltersWithFlStudioAndGenerate(string outputFolder, VoiceFilterSettings filterSettings, string outputFilePath, FlStudioResult result)
     {
         Console.WriteLine("Opening FL Studio");
         var flPath = filterSettings.FlStudioPath;
         var projectFolder = filterSettings.FlProjectContainingFolder;
         string args = $@"/r /ewav /f""{projectFolder}"" /o""{outputFolder}""";
-        await RunProcessAsync(flPath, args);
-        string outputFilterPath = Path.Combine(outputFolder, filterSettings.FlProjectNameWithoutExtension + ".wav");
-        TrimWav(outputFilterPath, outputFilePath, filterSettings.Padding);
+        await RunProcessAsync(flPath, args, FlStudioTimeOutDurationSeconds, result);
+        if (result.Success == true)
+        {
+            string outputFilterPath = Path.Combine(outputFolder, filterSettings.FlProjectNameWithoutExtension + ".wav");
+            TrimWav(outputFilterPath, outputFilePath, filterSettings.Padding);
+        }
     }
 
     private async Task<bool> SpeakAsyncWithCompletion(SpeechSynthesizer synthesizer, Prompt prompt,
@@ -169,7 +180,7 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
         public bool Success { get; } = success;
     }
     
-    private static async Task RunProcessAsync(string fileName, string args)
+    private static async Task RunProcessAsync(string fileName, string args, float timeoutSeconds, FlStudioResult result)
     {
         using Process process = Process.Start(new ProcessStartInfo
         {
@@ -178,7 +189,18 @@ public class VoiceLineGenerator(VoiceGeneratorSettings generatorSettings)
             UseShellExecute = false
         })!;
 
-        await process.WaitForExitAsync();
+        try
+        {
+            await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(timeoutSeconds));
+            result.SetSuccess(true);
+        }
+        catch (TimeoutException)
+        {
+            Console.WriteLine("FL Studio timed out; killing process");
+            process.Kill();
+            await process.WaitForExitAsync();
+            result.SetSuccess(false);
+        }
     }
     
     private static void TrimWav(string inputFilePath, string outputFilePath, double paddingInSeconds, double minVolume = 0.0001f)
