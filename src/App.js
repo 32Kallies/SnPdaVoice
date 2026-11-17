@@ -54,8 +54,7 @@ function SiteBio() {
         <p>I first started figuring out the PDA voice for <a href="https://www.nexusmods.com/subnautica/mods/1820">The Red Plague</a>,
         which made establishing new, natural-feeling content so much easier.
         </p>
-        <p>As of October 2026, I feel safe to say that I have nearly perfected the filters!
-        </p>
+        <p>Make sure to bookmark the <a href="https://pda.jbeast.cloud/">backup PDA voice site</a> in case this one goes down, or visit it now if you're having issues generating files.</p>
       </section>
     </div>
   )
